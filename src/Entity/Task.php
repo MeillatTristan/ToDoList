@@ -99,6 +99,9 @@ class Task
 
     public function getUser(): ?User
     {
+        if(empty($this->User)){
+            return 'anonyme';
+        }
         return $this->User;
     }
 
