@@ -3,35 +3,36 @@
 namespace App\Controller;
 
 use App\Entity\User as EntityUser;
-use AppBundle\Entity\User;
-use AppBundle\Form\UserType;
+use App\Form\UserType;
+use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
     /**
      * @Route("/users", name="user_list")
      */
-    public function listAction()
+    public function listAction(UserRepository $userRepository)
     {
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('AppBundle:User')->findAll()]);
+        return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
 
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = new EntityUser();
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+            $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $em->persist($user);
@@ -54,7 +55,7 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
