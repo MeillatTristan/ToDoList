@@ -6,7 +6,7 @@ use App\Entity\Task as EntityTask;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -86,11 +86,25 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(EntityTask $task)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($task);
-        $em->flush();
+        $user = $this->getUser();
+        $userTask = $task->getUser();
 
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+        if($userTask->getId() == 0 && in_array('ROLE_ADMIN', $user->getRoles(), true)){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($task);
+            $em->flush();
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        }
+        elseif($user == $userTask){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($task);
+            $em->flush();
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        }
+        else {
+            $this->addFlash('error', 'la tâche ne peut être supprimé que par son créateur.');
+        }
+
 
         return $this->redirectToRoute('task_list');
     }

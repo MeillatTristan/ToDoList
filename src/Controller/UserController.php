@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\User as EntityUser;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -17,6 +17,7 @@ class UserController extends AbstractController
      */
     public function listAction(UserRepository $userRepository)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
 
@@ -49,14 +50,14 @@ class UserController extends AbstractController
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(EntityUser $user, Request $request)
+    public function editAction(EntityUser $user, Request $request, UserPasswordEncoderInterface $encoder)
     {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+            $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $this->getDoctrine()->getManager()->flush();
