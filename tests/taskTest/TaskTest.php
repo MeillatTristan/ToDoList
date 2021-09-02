@@ -88,4 +88,16 @@ class TaskTest extends KernelTestCase{
       $task = $this->getEntityTask()->setUser($user);
       $this->assertEquals($task->getUser()->getEmail(), "test@test.com");
     }
+
+    public function testGetUserLinkedAnonyme(){
+      $task = new Task;
+      $this->assertEquals('anonyme', $task->getUser()->getPseudo());
+    }
+
+    public function testGetCreatedAt(){
+      $task = new Task;
+      $date = $task->getCreatedAt()->format('Y-m-d H:i:s');
+      $currentDate = new \DateTime();
+      $this->assertSame($currentDate->format('Y-m-d H:i:s'), $date);
+    }
 }

@@ -99,8 +99,10 @@ class Task
 
     public function getUser(): ?User
     {
-        if(empty($this->User)){
-            return 'anonyme';
+        if(!$this->User){
+            $user = new User;
+            $user->setPseudo('anonyme');
+            return $user;
         }
         return $this->User;
     }

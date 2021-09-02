@@ -21,7 +21,6 @@ class UserControllerTest extends WebTestCase
     {
         $testUser = $this->userRepository->findOneByEmail('admin@test.fr');
         $this->client->loginUser($testUser);
-        
     }
 
     public function loginWithUser(): void

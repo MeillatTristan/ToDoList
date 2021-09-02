@@ -54,7 +54,7 @@ class TaskController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
@@ -89,7 +89,7 @@ class TaskController extends AbstractController
         $user = $this->getUser();
         $userTask = $task->getUser();
 
-        if($userTask->getId() == 0 && in_array('ROLE_ADMIN', $user->getRoles(), true)){
+        if($userTask->getPseudo() == 'anonyme' && in_array('ROLE_ADMIN', $user->getRoles(), true)){
             $em = $this->getDoctrine()->getManager();
             $em->remove($task);
             $em->flush();
