@@ -21,6 +21,14 @@ class TaskController extends AbstractController
     }
 
     /**
+     * @Route("/taskDone", name="taskDone_list")
+     */
+    public function listToggle(TaskRepository $taskRepository)
+    {
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => true])]);
+    }
+
+    /**
      * @Route("/tasks/create", name="task_create")
      */
     public function createAction(Request $request)

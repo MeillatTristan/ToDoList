@@ -2,16 +2,22 @@
 
 {% block body %}
     {% if error %}
-        <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    <div class="flashMessage">
+        <div class="danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    </div>
     {% endif %}
-
-    <form action="{{ path('login') }}" method="post">
-        <label for="username">Email :</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" />
-
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="_password" />
-
-        <button class="btn btn-success" type="submit">Se connecter</button>
-    </form>
+    <div class="containerForm">
+        <h1>Connexion</h1>
+        <form action="{{ path('login') }}" method="post">
+            <label for="username">Email :</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}" />
+    
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="_password" />
+    
+            <div class="containerSubmit">
+                <input type="submit" value="Se connecter">
+            </div>
+        </form>
+    </div>
 {% endblock %}

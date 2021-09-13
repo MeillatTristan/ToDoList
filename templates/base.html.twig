@@ -10,28 +10,20 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
-
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <title>To Do List app</title>
-
-    <!-- Bootstrap Core CSS -->
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+    <script src="https://kit.fontawesome.com/836a2159df.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <nav>
-        <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
-        <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
+        <label for="">
+            <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
+            <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
+        </label>
         <ul>
-            <li>
-                <a href="{{ path('user_create') }}">Créer un utilisateur</a>
-            </li>
             {% if app.user %}
             <li>
                 <a href="{{ path('logout') }}">Se déconnecter</a>
@@ -46,8 +38,8 @@
     </nav>
 
     <!-- Page Content -->
-    <div>
-        <div>
+    {% if flash_message is defined %}
+        <div class="flashMessage">
             {% for flash_message in app.session.flashBag.get('success') %}
             <div class="success" role="alert">
                 <strong>Superbe !</strong> {{ flash_message }}
@@ -61,17 +53,28 @@
             {% endfor %}
 
             {% block header_title %}{% endblock %}
-            {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_homepage.jpg') }}" alt="todo list">{% endblock %}
+        </div>
+    {% endif %}
+    <div class="containerHome">
+        <div class="sidebar">
+            <a href="{{ path('task_create') }}" class="btn btn-success">Créer une nouvelle tâche</a>
+            <a href="{{ path('task_list') }}" class="btn btn-info">Consulter la liste des tâches à faire</a>
+            <a href="{{ path('taskDone_list') }}" class="btn btn-secondary">Consulter la liste des tâches terminées</a>
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('user_create') }}">Créer un utilisateur</a>
+            <a href="{{ path('user_list') }}">Lister les utilisateurs</a>
+            {% endif %}
+            
         </div>
         {% block body %}{% endblock %}
     </div>
     <!-- /.container -->
 
-        <footer>
-                <div>
-                    <p>Copyright &copy; OpenClassrooms</p>
-                </div>
-        </footer>
+    <footer>
+        <div>
+            <p>Copyright &copy; OpenClassrooms</p>
+        </div>
+    </footer>
 
 </body>
 
