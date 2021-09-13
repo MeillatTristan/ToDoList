@@ -1,6 +1,7 @@
 # ToDoList
 
 Améliorez une application existante de ToDo & Co.
+
 [![SymfonyInsight](https://insight.symfony.com/projects/e41230ed-3cc1-40f7-9ab6-5e66fc6bef7f/mini.svg)](https://insight.symfony.com/projects/e41230ed-3cc1-40f7-9ab6-5e66fc6bef7f)
 
 ## Description
